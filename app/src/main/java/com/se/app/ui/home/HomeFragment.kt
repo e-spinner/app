@@ -72,24 +72,19 @@ class HomeFragment : Fragment() {
 
             override fun onClick(v: View) {
                 isWorking = if (!isWorking) {
-                    // this sets the timer to simply display the phone's uptime
-                    cMeter.isCountDown = true;
-                    cMeter.base = SystemClock.elapsedRealtime() + 10000
-                    cMeter.start()
+
+                    // set clock to countdown for 30 seconds
+                    clock.setTimer(30)
+                    // start clock
+                    clock.startTimer()
                     true
                 } else {
-                    cMeter.stop()
+                    clock.stopTimer()
                     false
                 }
 
                 runButton.text = if (!isWorking) getString(R.string.start) else getString(R.string.stop)
 
-                Toast.makeText(context, getString(
-                    if (isWorking)
-                        R.string.working
-                    else
-                        R.string.stopped),
-                    Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -108,11 +103,17 @@ class HomeFragment : Fragment() {
     private class Timer ( var clock: Chronometer ){
         private var running: Boolean = false
         private var pauseOffset: Long = 0
+        private var baseTime: Long = 0
+
+        fun setTimer( time: Long ) {
+            baseTime = time * 1000;
+            pauseOffset = 0;
+        }
 
         fun startTimer() {
             if (!running) {
                 clock.isCountDown = true
-                clock.base = SystemClock.elapsedRealtime() - pauseOffset
+                clock.base = SystemClock.elapsedRealtime() - pauseOffset + baseTime
                 clock.start();
                 running = true;
             }
@@ -126,9 +127,11 @@ class HomeFragment : Fragment() {
             }
         }
 
-        fun resetTimer() {
+        fun stopTimer() {
             clock.base = SystemClock.elapsedRealtime();
             pauseOffset = 0;
+            clock.stop()
+            running = false;
         }
     }
 
