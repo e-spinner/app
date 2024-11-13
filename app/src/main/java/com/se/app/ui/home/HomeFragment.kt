@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Chronometer
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -106,32 +105,32 @@ class HomeFragment : Fragment() {
         private var baseTime: Long = 0
 
         fun setTimer( time: Long ) {
-            baseTime = time * 1000;
-            pauseOffset = 0;
+            baseTime = time * 1000
+            pauseOffset = 0
         }
 
         fun startTimer() {
             if (!running) {
                 clock.isCountDown = true
                 clock.base = SystemClock.elapsedRealtime() - pauseOffset + baseTime
-                clock.start();
-                running = true;
+                clock.start()
+                running = true
             }
         }
 
         fun pauseTimer() {
             if (running) {
-                clock.stop();
-                pauseOffset = SystemClock.elapsedRealtime() - clock.base;
-                running = false;
+                clock.stop()
+                pauseOffset = SystemClock.elapsedRealtime() - clock.base
+                running = false
             }
         }
 
         fun stopTimer() {
-            clock.base = SystemClock.elapsedRealtime();
-            pauseOffset = 0;
+            clock.base = SystemClock.elapsedRealtime()
+            pauseOffset = 0
             clock.stop()
-            running = false;
+            running = false
         }
     }
 
