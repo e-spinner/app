@@ -5,8 +5,8 @@
 ### MVP
 
 - [x] basic stopwatch
-- [ ] distance tracking
-- [ ] way to save and load data
+- [ ] distance tracking (can currently get lat / long)
+- [x] way to save and load data
 - [ ] run planner / editor
 - [ ] basic ui to tell user to run / walk
 

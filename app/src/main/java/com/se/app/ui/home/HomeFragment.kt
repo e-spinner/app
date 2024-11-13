@@ -59,7 +59,7 @@ class HomeFragment : Fragment() {
         // to switch call .setCountDown(boolean)
         cMeter = binding.cMeter
 
-        // Google Play services Location calculator
+        // Google Play Location Service
         fLocationPC = LocationServices.getFusedLocationProviderClient(requireActivity())
         setupLocationChangeListener()
 
@@ -70,6 +70,7 @@ class HomeFragment : Fragment() {
 
             override fun onClick(v: View) {
                 isWorking = if (!isWorking) {
+                    // this sets the timer to simply display the phone's uptime
                     cMeter.base = 0
                     cMeter.start()
                     true
@@ -113,11 +114,15 @@ class HomeFragment : Fragment() {
         }
     }
 
-    //
+    // this requests location permission, and seems to work but shows errors for me.
     @SuppressLint("MissingPermission", "VisibleForTests")
     @AfterPermissionGranted(REQUEST_CODE_FINE_LOCATION)
     private fun setupLocationChangeListener() {
         if (EasyPermissions.hasPermissions(context, ACCESS_FINE_LOCATION)) {
+
+            // right now this just fetches and prints the location every 5 seconds.
+            // need to hook this into some kind of distance tracker, can use locationCallback elsewhere
+
             val locationRequest = LocationRequest()
             locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             locationRequest.interval = 5000 // 5000ms (5s)

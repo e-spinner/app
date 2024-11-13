@@ -1,6 +1,8 @@
 package com.se.app
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -32,4 +34,18 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
+    private fun saveFloats(saveKey: String, floatList: List<Float>, keyList: List<String>){
+        Log.d("save", "saving data")
+        val sharedPref = this.getSharedPreferences(saveKey, Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()) {
+
+            for ((data, key) in floatList.zip(keyList)) {
+                putFloat(key, data)
+            }
+        }
+    }
 }
+
+
+
