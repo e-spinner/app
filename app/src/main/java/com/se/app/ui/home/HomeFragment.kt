@@ -2,9 +2,9 @@ package com.se.app.ui.home
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
-import android.location.Location
 import android.os.Bundle
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,13 +25,15 @@ import com.se.app.databinding.FragmentHomeBinding
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
 
+
 private const val REQUEST_CODE_FINE_LOCATION = 1
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-    private lateinit var cMeter: Chronometer
+    private lateinit var clock: Timer
+
     private lateinit var fLocationPC: FusedLocationProviderClient
     private lateinit var distanceDisplay: TextView
 
@@ -57,7 +59,7 @@ class HomeFragment : Fragment() {
 
         // chronometer object that can act as a stopwatch or timer
         // to switch call .setCountDown(boolean)
-        cMeter = binding.cMeter
+        clock = Timer(binding.cMeter)
 
         // Google Play Location Service
         fLocationPC = LocationServices.getFusedLocationProviderClient(requireActivity())
@@ -71,7 +73,8 @@ class HomeFragment : Fragment() {
             override fun onClick(v: View) {
                 isWorking = if (!isWorking) {
                     // this sets the timer to simply display the phone's uptime
-                    cMeter.base = 0
+                    cMeter.isCountDown = true;
+                    cMeter.base = SystemClock.elapsedRealtime() + 10000
                     cMeter.start()
                     true
                 } else {
@@ -98,6 +101,40 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    // *********** //
+    // Timer Logic //
+    // *********** //
+    private class Timer ( var clock: Chronometer ){
+        private var running: Boolean = false
+        private var pauseOffset: Long = 0
+
+        fun startTimer() {
+            if (!running) {
+                clock.isCountDown = true
+                clock.base = SystemClock.elapsedRealtime() - pauseOffset
+                clock.start();
+                running = true;
+            }
+        }
+
+        fun pauseTimer() {
+            if (running) {
+                clock.stop();
+                pauseOffset = SystemClock.elapsedRealtime() - clock.base;
+                running = false;
+            }
+        }
+
+        fun resetTimer() {
+            clock.base = SystemClock.elapsedRealtime();
+            pauseOffset = 0;
+        }
+    }
+
+    // ***************** //
+    // Location Tracking //
+    // ***************** //
 
     // location callback
     private val locationCallback = object: LocationCallback() {
