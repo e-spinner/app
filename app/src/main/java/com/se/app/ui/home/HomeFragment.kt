@@ -37,6 +37,8 @@ class HomeFragment : Fragment() {
     private lateinit var distanceDisplay: TextView
 
     private lateinit var runButton: Button
+    private lateinit var stateOutput: TextView
+    private lateinit var display: StateDisplay
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -52,6 +54,11 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        // Constructor for run / walk state display
+        stateOutput = binding.moveState
+        display = StateDisplay( stateOutput )
+        display.walk()
 
         distanceDisplay = binding.distanceDisplay
         runButton = binding.runButton
@@ -76,9 +83,13 @@ class HomeFragment : Fragment() {
                     clock.setTimer(30)
                     // start clock
                     clock.startTimer()
+
+                    display.run()
                     true
                 } else {
                     clock.stopTimer()
+
+                    display.walk()
                     false
                 }
 
@@ -104,8 +115,8 @@ class HomeFragment : Fragment() {
         private var pauseOffset: Long = 0
         private var baseTime: Long = 0
 
-        fun setTimer( time: Long ) {
-            baseTime = time * 1000
+        fun setTimer( seconds: Long ) {
+            baseTime = seconds * 1000
             pauseOffset = 0
         }
 
@@ -175,6 +186,21 @@ class HomeFragment : Fragment() {
                 perms = arrayOf(ACCESS_FINE_LOCATION)
             )
         }
+    }
+
+    // ************************ //
+    // Run / Walk State Display //
+    // ************************ //
+    private class StateDisplay( var output : TextView ) {
+
+        fun walk() {
+            output.text = "walking"
+        }
+
+        fun run() {
+            output.text = "running"
+        }
+
     }
 }
 
