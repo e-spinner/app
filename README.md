@@ -1,4 +1,4 @@
-# app
+# Running App, real name TBA
 
 ## TODO
 
@@ -6,12 +6,17 @@
 
 - [x] basic stopwatch
 > Timer class 
-> setTimer(seconds) declares # of seconds on timer
-> can also start, stop, and hopefully pause
+> 
+> setTimer(seconds) declares # of seconds on timer.
+> 
+> can also start, stop, and pause
 
 - [ ] method of controlling countdown states / times
 > Should be able to read in the default pref, and start timers of set length and update the stateDisplay for the appropriate action.
+> 
+> currently is hardcoded, but adding actually loading shouldn't be too hard, probably
 
+![img.png](img.png)
 
 - [ ] distance tracking (can currently get lat / long)
 > using gms can request lat / long, want to tie into a google map to show running route
