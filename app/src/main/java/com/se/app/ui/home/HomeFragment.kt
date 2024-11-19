@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Chronometer
 import android.widget.TextView
+import androidx.core.text.buildSpannedString
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -24,6 +25,12 @@ import com.se.app.R
 import com.se.app.databinding.FragmentHomeBinding
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.annotations.AfterPermissionGranted
+import android.content.Context
+import android.graphics.drawable.Drawable
+import android.text.SpannableString
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
+
 
 
 private const val REQUEST_CODE_FINE_LOCATION = 1
@@ -42,10 +49,12 @@ class HomeFragment : Fragment() {
 
     private lateinit var distanceDisplay: TextView
     private lateinit var stateTV: TextView
+    private lateinit var runStatus: ImageView
 
     private lateinit var tracker: Tracker
     private lateinit var display: Display
     private lateinit var clock: Timer
+    private lateinit var displayImage : DisplayImage
 
     private lateinit var controller: Controller
 
@@ -63,6 +72,7 @@ class HomeFragment : Fragment() {
 
 
         stateTV = binding.moveState
+        runStatus = binding.runStatus
         distanceDisplay = binding.distanceDisplay
         loadButton = binding.loadButton
         startButton = binding.playButton
@@ -78,7 +88,8 @@ class HomeFragment : Fragment() {
         tracker = Tracker()
         clock = Timer(cMeter)
         display = Display(stateTV)
-        controller = Controller(tracker, clock, display)
+        displayImage = DisplayImage(runStatus)
+        controller = Controller(tracker, clock, display, displayImage)
 
         loadButton.setOnClickListener { controller.load() }
         startButton.setOnClickListener { controller.play() }
@@ -92,7 +103,7 @@ class HomeFragment : Fragment() {
     // Main State Machine //
     // ****************** //
 
-    private class Controller( var tracker: Tracker, var timer: Timer, var display: Display) {
+    private class Controller( var tracker: Tracker, var timer: Timer, var display: Display, var displayImage: DisplayImage) {
         var numCycles: Int = 0
         var runTime: Long = 0
         var walkTime: Long = 0
@@ -136,6 +147,7 @@ class HomeFragment : Fragment() {
             Log.d("controller", "stopping")
             timer.stop()
             display.stop()
+            displayImage.stop()
             tracker.stop()
             playing = false
             saveData()
@@ -145,6 +157,7 @@ class HomeFragment : Fragment() {
             timer.pause()
             tracker.pause()
             display.idle()
+            displayImage.idle()
         }
         fun play() {
             // run
@@ -156,6 +169,7 @@ class HomeFragment : Fragment() {
                 }
                 Log.d("controller", "running")
                 display.run()
+                displayImage.run()
                 tracker.resume()
                 timer.start()
             }
@@ -168,6 +182,7 @@ class HomeFragment : Fragment() {
                 }
                 Log.d("controller", "walking")
                 display.walk()
+                displayImage.walk()
                 tracker.resume()
                 timer.start()
             }
@@ -186,6 +201,7 @@ class HomeFragment : Fragment() {
 
         }
     }
+
 
     // *********** //
     // Timer Logic //
@@ -295,10 +311,27 @@ class HomeFragment : Fragment() {
         }
     }
 
+    
     // ************************ //
     // Run / Walk State Display //
     // ************************ //
-    private class Display(var output : TextView ) {
+    private class DisplayImage(var outputImage : ImageView) {
+        fun walk() {
+            outputImage.setImageResource(R.drawable.walk_icon)
+        }
+        fun run() {
+            outputImage.setImageResource(R.drawable.run_icon)
+        }
+        fun idle() {
+            outputImage.setImageResource(R.drawable.idle_icon)
+        }
+        fun stop() {
+            outputImage.setImageResource(R.drawable.stop_icon)
+        }
+
+    }
+    private class Display(var output : TextView) {
+
 
         // make better
         fun walk() {
@@ -314,13 +347,11 @@ class HomeFragment : Fragment() {
         fun idle() {
             Log.d("display", "idle")
             output.text = "idle"
-
         }
 
         fun stop() {
             Log.d("display", "stop")
             output.text = "stopped"
-
         }
 
     }
@@ -330,4 +361,5 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
+
 
