@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Timer App</title>
+    <link rel="stylesheet" href="/static/styles.css">
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZS2Wretv0mja0wkGSiPyCrx2-Q0rlKZU"></script>
+    <script src="{{ url_for('static', filename='tracker.js') }}"></script>
+    <script src="{{ url_for('static', filename='map.js') }}"></script>
+    <script src="{{ url_for('static', filename='timer.js') }}"></script>
+</head>
+
+<body>
+    <h1>Run Timer App</h1>
+    <div id="map"></div>
+
+    <button onclick="startTracking()">Start Tracking</button>
+
+    <!-- SVG Feedback Area -->
+    <div id="display">
+
+        <svg id="runIcon" class="hidden" viewBox="0 0 24 24" fill="000000" xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid meet">
+            <circle cx=" 17" cy="4" r="2" />
+            <path
+                d="M15.777 10.969a2.007 2.007 0 0 0 2.148.83l3.316-.829-.483-1.94-3.316.829-1.379-2.067a2.01 2.01 0 0 0-1.272-.854l-3.846-.77a1.998 1.998 0 0 0-2.181 1.067l-1.658 3.316 1.789.895 1.658-3.317 1.967.394L7.434 17H3v2h4.434c.698 0 1.355-.372 1.715-.971l1.918-3.196 5.169 1.034 1.816 5.449 1.896-.633-1.815-5.448a2.007 2.007 0 0 0-1.506-1.33l-3.039-.607 1.772-2.954.417.625z" />
+        </svg>
+
+        <svg id="walkIcon" class="hidden" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="xMidYMid meet">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M13 6C14.1046 6 15 5.10457 15 4C15 2.89543 14.1046 2 13 2C11.8955 2 11 2.89543 11 4C11 5.10457 11.8955 6 13 6ZM11.0528 6.60557C11.3841 6.43992 11.7799 6.47097 12.0813 6.68627L13.0813 7.40056C13.3994 7.6278 13.5559 8.01959 13.482 8.40348L12.4332 13.847L16.8321 20.4453C17.1384 20.9048 17.0143 21.5257 16.5547 21.8321C16.0952 22.1384 15.4743 22.0142 15.168 21.5547L10.5416 14.6152L9.72611 13.3919C9.58336 13.1778 9.52866 12.9169 9.57338 12.6634L10.1699 9.28309L8.38464 10.1757L7.81282 13.0334C7.70445 13.575 7.17759 13.9261 6.63604 13.8178C6.09449 13.7094 5.74333 13.1825 5.85169 12.641L6.51947 9.30379C6.58001 9.00123 6.77684 8.74356 7.05282 8.60557L11.0528 6.60557ZM16.6838 12.9487L13.8093 11.9905L14.1909 10.0096L17.3163 11.0513C17.8402 11.226 18.1234 11.7923 17.9487 12.3162C17.7741 12.8402 17.2078 13.1234 16.6838 12.9487ZM6.12844 20.5097L9.39637 14.7001L9.70958 15.1699L10.641 16.5669L7.87159 21.4903C7.60083 21.9716 6.99111 22.1423 6.50976 21.8716C6.0284 21.6008 5.85768 20.9911 6.12844 20.5097Z"
+                fill="#000000" />
+        </svg>
+    </div>
+
+    <div id="sessionController">
+        <button id="startRunButton">Start Run</button>
+        <button id="pauseButton" class="hidden">Pause</button>
+        <button id="resumeButton" class="hidden">Resume</button>
+    </div>
+
+    <div id="timerDisplay">Time Left: 00:00</div>
+
+    <button id="stopButton" class="hidden">Stop</button>
+
+
+    <!-- Modal for setting exercise times -->
+    <div id="timerModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Set Timer</h2>
+            <label for="exerciseDuration">Total Exercise Duration (minutes):</label>
+            <input type="number" id="exerciseDuration" required>
+            <br>
+            <label for="cycles">Number of Cycles:</label>
+            <input type="number" id="cycles" required>
+            <br>
+            <button id="startSession">Start Session</button>
+            <button id="cancelSession">Cancel</button>
+        </div>
+    </div>
+
+</body>
+
+</html>
