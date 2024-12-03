@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const wWidth = (wFraction * 100) / c;
 
 
-        timeVal.textContent = `${time.value} min, run ${rTime / 60000} min and walk ${wTime / 60000} min ${c} times `;
+        timeVal.textContent = `${time.value} min, run ${Math.round(rTime / 60000)} min and walk ${Math.round(wTime / 60000)} min ${c} times `;
 
         // Clear the time bar
         timeBar.innerHTML = "";
@@ -213,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             navigator.vibrate([500]);
         } catch (error) {
-            console.alert('vibrate no worky')
+            console.log('vibrate no worky')
         }
     }
 
