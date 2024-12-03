@@ -1,5 +1,13 @@
 from flask import Flask, render_template, request, jsonify, json
 import os
+import socket
+
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip = s.getsockname()[0]
+    s.close()
+    return ip
 
 
 app = Flask(__name__)
@@ -43,4 +51,6 @@ def current_route():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='192.168.20.161')
+    app.run(debug=True, host=get_local_ip())
+    
+    

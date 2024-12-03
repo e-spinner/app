@@ -5,20 +5,26 @@ let timeLeft; // Time remaining in the current action
 let isPaused = false;
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    // ******** //
+    // Timer UI //
+    // ******** //
+
     const startRunButton = document.getElementById("startRunButton");
     const timerModal = document.getElementById("timerModal");
     const startSessionButton = document.getElementById("startSession");
     const cancelSessionButton = document.getElementById("cancelSession");
-    const pauseButton = document.getElementById("pauseButton");
-    const resumeButton = document.getElementById("resumeButton");
-    const stopButton = document.getElementById("stopButton");
-    const timerDisplay = document.getElementById("timerDisplay");
-    const runIcon = document.getElementById("runIcon");
-    const walkIcon = document.getElementById("walkIcon");
+
+    const time = document.getElementById("time");
+    const cycles = document.getElementById("cycles");
+    const weight = document.getElementById("weight");
+
+    const timeVal = document.getElementById("timeVal");
 
     startRunButton.addEventListener("click", () => {
         timerModal.classList.remove('hidden')
         startRunButton.classList.add('hidden');
+        updateVisualization();
     });
 
     cancelSessionButton.addEventListener("click", () => {
@@ -26,30 +32,55 @@ document.addEventListener("DOMContentLoaded", () => {
         startRunButton.classList.remove('hidden');
     });
 
+    time.addEventListener("input", () => {
+        updateVisualization();
+    });
+
+    cycles.addEventListener("input", () => {
+        updateVisualization();
+    });
+
+    weight.addEventListener("input", () => {
+        updateVisualization();
+    });
+
+
     startSessionButton.addEventListener("click", () => {
-        const exerciseDuration = parseInt(document.getElementById("exerciseDuration").value) * 60 * 1000;
-        const cycles = parseInt(document.getElementById("cycles").value);
+        const t = parseInt(time.value) * 60 * 1000; // change to milliseconds
+        const c = parseInt(cycles.value);
+        const w = parseInt(weight.value);
 
-        if (!exerciseDuration || !cycles) {
-            alert("Please fill in both fields.");
-            return;
-        }
+        const rFraction = w / 10;
+        const wFraction = 1 - rFraction;
 
-        const runTime = exerciseDuration / (2 * cycles); // Split duration equally
-        const walkTime = runTime;
+
+        const rTime = Math.ceil(((t * rFraction) / c) / 1000) * 1000;
+        const wTime = Math.ceil(((t * wFraction) / c) / 1000) * 1000;
+
 
         intervalSchedule = [];
-        for (let i = 0; i < cycles; i++) {
-            intervalSchedule.push({ action: "Run", duration: runTime });
-            intervalSchedule.push({ action: "Walk", duration: walkTime });
+        for (let i = 0; i < c; i++) {
+            intervalSchedule.push({ action: "Run", duration: rTime });
+            intervalSchedule.push({ action: "Walk", duration: wTime });
         }
 
+
+        console.log("Plan:", intervalSchedule);
         timerModal.classList.add('hidden')
         currentIntervalIndex = 0;
         startInterval();
 
         pauseButton.classList.remove('hidden');
     });
+
+
+    // ************** //
+    // Timer Controls //
+    // ************** //
+
+    const pauseButton = document.getElementById("pauseButton");
+    const resumeButton = document.getElementById("resumeButton");
+    const stopButton = document.getElementById("stopButton");
 
     pauseButton.addEventListener("click", () => {
         if (timer) {
@@ -76,6 +107,15 @@ document.addEventListener("DOMContentLoaded", () => {
         resetTimer();
     });
 
+    // ************* //
+    // Timer Visuals //
+    // ************* //
+
+    const timerDisplay = document.getElementById("timerDisplay");
+    const runIcon = document.getElementById("runIcon");
+    const walkIcon = document.getElementById("walkIcon");
+    const timeBar = document.getElementById("timeBar");
+
     function updateTimerDisplay() {
         const minutes = Math.floor(timeLeft / 60000);
         const seconds = Math.floor((timeLeft % 60000) / 1000);
@@ -92,12 +132,50 @@ document.addEventListener("DOMContentLoaded", () => {
         stopButton.classList.add('hidden');
         startRunButton.classList.remove('hidden');
 
-        walkIcon.classList.add('hidden')
-        runIcon.classList.add('hidden')
+        walkIcon.classList.add('hidden');
+        runIcon.classList.add('hidden');
     }
 
+    function updateVisualization() {
+        const t = parseInt(time.value) * 60 * 1000; // change to milliseconds
+        const c = parseInt(cycles.value);
+        const w = parseInt(weight.value);
+
+        const rFraction = w / 10;
+        const wFraction = 1 - rFraction;
+
+
+        const rTime = (t * rFraction) / c;
+        const wTime = (t * wFraction) / c;
+
+        const totalIntervals = c * 2;
+        const rWidth = (rFraction * 100) / c;
+        const wWidth = (wFraction * 100) / c;
+
+
+        timeVal.textContent = `${time.value} min, run ${rTime / 60000} min and walk ${wTime / 60000} min ${c} times `;
+
+        // Clear the time bar
+        timeBar.innerHTML = "";
+
+        for (let i = 0; i < totalIntervals; i++) {
+            const isRun = i % 2 === 0; // Alternate between run and walk
+            const segment = document.createElement("div");
+            segment.className = isRun ? "run" : "walk";
+            segment.style.width = isRun ? `${rWidth}%` : `${wWidth}%`;
+            segment.title = isRun
+                ? `Run: ${Math.round(rTime / 1000)} seconds`
+                : `Walk: ${Math.round(wTime / 1000)} seconds`;
+            timeBar.appendChild(segment);
+        }
+    }
+
+    // ****** //
+    // Helper //
+    // ****** //
+
+
     function startInterval() {
-        const feedbackArea = document.getElementById("display");
         const currentInterval = intervalSchedule[currentIntervalIndex];
 
         // Update SVG visibility
@@ -132,7 +210,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function beep() {
         // const audio = new Audio('{{ url_for("static", filename="beep.mp3") }}');
         // audio.play();
-        navigator.vibrate([500]);
+        try {
+            navigator.vibrate([500]);
+        } catch (error) {
+            console.alert('vibrate no worky')
+        }
     }
 
 });

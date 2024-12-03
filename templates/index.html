@@ -51,13 +51,20 @@
     <!-- Modal for setting exercise times -->
     <div id="timerModal" class="modal hidden">
         <div class="modal-content">
-            <h2>Set Timer</h2>
-            <label for="exerciseDuration">Total Exercise Duration (minutes):</label>
-            <input type="number" id="exerciseDuration" required>
-            <br>
+            <h2>Plan Your Run</h2>
+
+            <label for="time">Total Time (minutes):</label>
+            <input type="range" id="time" min="5" max="120" value="30" step="5">
+
             <label for="cycles">Number of Cycles:</label>
-            <input type="number" id="cycles" required>
-            <br>
+            <input type="range" id="cycles" min="1" max="10" value="5">
+
+            <label for="weight">Run vs. Walk Weighting:</label>
+            <input type="range" id="weight" min="1" max="9" value="5">
+
+            <div id="timeBar"></div>
+            <span id="timeVal">30</span>
+
             <button id="startSession">Start Session</button>
             <button id="cancelSession">Cancel</button>
         </div>
