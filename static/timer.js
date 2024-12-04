@@ -98,6 +98,14 @@ document.addEventListener("DOMContentLoaded", () => {
             pauseButton.classList.remove('hidden');
             resumeButton.classList.add('hidden');
             stopButton.classList.add('hidden');
+            
+            //stuff I need to make work
+            var runSound = new Audio('{{ url_for("static", filename="assets/Walking.mp3") }}');
+            //var runCompleted = new Audio('path_to_your_audio_file.mp3');
+            //var walkSound = new Audio('path_to_your_audio_file.mp3');
+            // const audio = new Audio('{{ url_for("static", filename="beep.mp3") }}');
+            runSound.play();
+
             startInterval(); // Restart with remaining time
         }
     });
