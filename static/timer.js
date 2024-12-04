@@ -105,6 +105,21 @@ document.addEventListener("DOMContentLoaded", () => {
     stopButton.addEventListener("click", () => {
         clearTimeout(timer);
         resetTimer();
+
+        fetch('/debug', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(masterPath)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response from server:', data);
+            })
+            .catch(error => {
+                console.error('Error sending request:', error);
+            });
     });
 
     // ************* //

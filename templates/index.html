@@ -9,15 +9,13 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZS2Wretv0mja0wkGSiPyCrx2-Q0rlKZU"></script>
     <script src="{{ url_for('static', filename='tracker.js') }}"></script>
-    <script src="{{ url_for('static', filename='map.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='map.js') }}"></script> -->
     <script src="{{ url_for('static', filename='timer.js') }}"></script>
 </head>
 
 <body>
     <h1>Run Timer App</h1>
     <div id="map"></div>
-
-    <button onclick="startTracking()">Start Tracking</button>
 
     <!-- SVG Feedback Area -->
     <div id="display">
