@@ -9,7 +9,7 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZS2Wretv0mja0wkGSiPyCrx2-Q0rlKZU"></script>
     <script src="{{ url_for('static', filename='tracker.js') }}"></script>
-    <!-- <script src="{{ url_for('static', filename='map.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='share.js') }}"></script>
     <script src="{{ url_for('static', filename='timer.js') }}"></script>
 </head>
 
@@ -65,6 +65,24 @@
 
             <button id="startSession">Start Session</button>
             <button id="cancelSession">Cancel</button>
+        </div>
+    </div>
+
+
+    <!-- Modal for setting exercise times -->
+    <div id="shareModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Explore Your Run</h2>
+
+            <!-- Display map with the run path -->
+            <div id="shareMap"></div>
+
+            <!-- Display the total distance and duration -->
+            <p id="distance">Distance: 0 mi</p>
+            <p id="duration">Duration: 0 min</p>
+
+            <!-- Button to share the run -->
+            <button id="shareButton">Share Your Run</button>
         </div>
     </div>
 

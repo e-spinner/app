@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, jsonify, json
-import os
+from flask import Flask, render_template, request, jsonify
 import socket
+from pymongo import MongoClient
+from datetime import datetime
 
 def get_local_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -11,6 +12,12 @@ def get_local_ip():
 
 
 app = Flask(__name__)
+
+uri = "mongodb+srv://es:ybiXW78TszAKGYx2@rundata.zr3cj.mongodb.net/?retryWrites=true&w=majority&appName=rundata"
+client = MongoClient(uri)
+database = client.get_database("rundata")
+paths = database.get_collection("paths")
+
 
 @app.route('/')
 def index():
@@ -24,9 +31,22 @@ def debug():
     print("POST Debug Data:", debug_data)
     return jsonify({"message": "POST request received"})
 
+@app.route('/save_path_data', methods=['POST'])
+def save_path_data() :
+    data = request.get_json()
+    path = data.path
+    usr = data.usr 
+    time = datetime.date()
+    
+    data = {
+        "username": usr,
+        "timestamp": time,
+        "path": path
+    }
+    
+    paths.insert_one
+    return jsonify({"message": "POST request received"})
 
 
 if __name__ == '__main__':
     app.run(debug=True, host=get_local_ip() )
-    
-    
