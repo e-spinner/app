@@ -141,3 +141,100 @@ function calculateDistance(path) {
 function deg2rad(deg) {
     return deg * (Math.PI / 180);
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const leaderModal = document.getElementById('leaderboardModal')
+    const leaderButton = document.getElementById('leaderBoardButton')
+
+
+    leaderButton.addEventListener('click', async () => {
+        leaderModal.classList.remove('hidden')
+
+        const leaderDisplay = document.getElementById('leaderDisplay')
+
+        try {
+            const response = await fetch('/leaderboard');
+            if (!response.ok) {
+                throw new Error("Failed to fetch leaderboard data");
+            }
+
+            const leaderboard = await response.json();
+            console.log("Leaderboard Data:", leaderboard);
+
+            leaderboard.forEach((entry, index) => {
+                const item = document.createElement("div");
+                item.classList.add('leader')
+
+                const canvasId = `path_${index}`;
+
+                item.innerHTML = `
+                <p>#${index + 1}: ${entry.username}</p>
+                <p>Distance: ${entry.distance.toFixed(2)} mi</p>
+                <p>Duration: ${entry.duration.toFixed(1)} mins</p>
+                <p>Date: ${entry.timestamp}</p>
+                <canvas id="${canvasId}"></canvas>
+                `;
+
+                leaderDisplay.appendChild(item);
+
+                const canvas = document.getElementById(canvasId);
+                if (canvas && entry.path && entry.path.length > 1) {
+                    const ctx = canvas.getContext('2d');
+
+                    const path = entry.path;
+                    // console.log(path)
+
+                    const width = canvas.parentElement.clientWidth;
+                    const height = canvas.parentElement.clientHeight;
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const bounds = {
+                        minX: Math.min(...path.map(point => point.x)),
+                        maxX: Math.max(...path.map(point => point.x)),
+                        minY: Math.min(...path.map(point => point.y)),
+                        maxY: Math.max(...path.map(point => point.y)),
+                    };
+
+                    const rangeX = bounds.maxX - bounds.minX;
+                    const rangeY = bounds.maxY - bounds.minY;
+
+
+                    // console.log(canvas.width, canvas.height)
+
+                    // Normalize and scale points
+                    const scaledPath = path.map(point => ({
+                        x: ((point.x - bounds.minX) / rangeX) * (width * 0.9) + (width * 0.05),
+                        y: height - (((point.y - bounds.minY) / rangeY) * (height * 0.9) + (height * 0.05))
+                    }));
+
+                    console.log(scaledPath)
+                    // Draw the path
+                    ctx.beginPath();
+                    ctx.moveTo(scaledPath[0].x, scaledPath[0].y);
+                    scaledPath.slice(1).forEach(point => {
+                        ctx.lineTo(point.x, point.y)
+                    });
+                    ctx.strokeStyle = '#007BFF';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                } else {
+                    console.warn(`No path data available for ${entry.username}`);
+                }
+            });
+        } catch (error) {
+            console.error("Error loading leaderboard:", error);
+        }
+
+
+        const closeLeader = document.getElementById('closeLeaderboard')
+
+        closeLeader.addEventListener('click', () => {
+            leaderModal.classList.add('hidden')
+        })
+    })
+
+});

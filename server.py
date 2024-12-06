@@ -32,7 +32,7 @@ def debug():
     return jsonify({"message": "POST request received"})
 
 @app.route('/save_path_data', methods=['POST'])
-def save_path_data() :
+def save_path_data():
     data = request.get_json()
     
     path = data.get('path')
@@ -52,8 +52,31 @@ def save_path_data() :
     paths.insert_one(record)
     return jsonify({"message": "POST request received"})
 
+@app.route('/leaderboard')
+def leaderboard():
+    try:
+        # Fetch all runs from the database and sort them by distance
+        runs = list(paths.find().sort("distance", -1))
+        
+        # response data
+        leaderboard_data = [
+            {
+                "username": run["username"],
+                "timestamp": run["timestamp"].strftime("%Y-%m-%d %H:%M:%S"),
+                "duration": run["duration"],
+                "distance": run["distance"],
+                "path": run["path"]
+            }
+            for run in runs
+        ]
+        
+        return jsonify(leaderboard_data)
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
  
-    app.run(debug=False, host=get_local_ip())
+    app.run(debug=True, host=get_local_ip())
 
