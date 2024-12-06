@@ -10,6 +10,12 @@ body {
     height: 250px;
 }
 
+#shareMap {
+    width: 100%;
+    height: 300px;
+    border: 1px solid black;
+}
+
 .modal {
     display: block;
     position: fixed;

@@ -1,7 +1,9 @@
 let intervalSchedule = [];
 let currentIntervalIndex = 0;
 let timer;
-let timeLeft; // Time remaining in the current action
+let timeLeft;
+let totalTimeLeft;
+let totalTime;
 let isPaused = false;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -20,6 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const weight = document.getElementById("weight");
 
     const timeVal = document.getElementById("timeVal");
+
+    const shareModal = document.getElementById("shareModal")
 
     startRunButton.addEventListener("click", () => {
         timerModal.classList.remove('hidden')
@@ -103,6 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     stopButton.addEventListener("click", () => {
+        openShareModal();
         clearTimeout(timer);
         resetTimer();
     });
@@ -152,6 +157,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const rWidth = (rFraction * 100) / c;
         const wWidth = (wFraction * 100) / c;
 
+        totalTime = t
+        totalTimeLeft = t
 
         timeVal.textContent = `${time.value} min, run ${Math.round(rTime / 60000)} min and walk ${Math.round(wTime / 60000)} min ${c} times `;
 
@@ -197,11 +204,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (currentIntervalIndex < intervalSchedule.length) {
                     startInterval();
                 } else {
-                    alert("Session complete!");
+                    // alert("Session complete!");
+                    openShareModal();
                     resetTimer();
                 }
             } else {
                 timeLeft -= 1000;
+                totalTimeLeft -= 1000;
                 updateTimerDisplay();
             }
         }, 1000);
