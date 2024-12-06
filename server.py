@@ -54,4 +54,6 @@ def save_path_data() :
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host=get_local_ip() )
+ 
+    app.run(debug=False, host=get_local_ip())
+
