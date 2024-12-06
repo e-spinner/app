@@ -75,7 +75,7 @@
             <h2>Explore Your Run</h2>
 
             <!-- Display map with the run path -->
-            <div id="shareMap"></div>
+            <canvas id="shareMap"></canvas>
 
             <!-- Display the total distance and duration -->
             <p id="distance">Distance: 0 mi</p>
@@ -83,7 +83,22 @@
 
             <!-- Button to share the run -->
             <button id="shareButton">Share Your Run</button>
+
+            <br>
+
+            <!-- Button to exit shareModal -->
+            <button id="endShareButton">exit</button>
         </div>
+    </div>
+
+    <div id="nameRun" class="modal hidden">
+        <h2>Enter Your Name</h2>
+
+        <form id="nameForm">
+            <label for="nameInput">Name:</label>
+            <input type="text" id="nameInput" name="name" required>
+            <button type="submit">Share</button>
+        </form>
     </div>
 
 </body>

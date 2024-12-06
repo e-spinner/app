@@ -34,17 +34,22 @@ def debug():
 @app.route('/save_path_data', methods=['POST'])
 def save_path_data() :
     data = request.get_json()
-    path = data.path
-    usr = data.usr 
-    time = datetime.date()
     
-    data = {
+    path = data.get('path')
+    usr = data.get('username')  
+    duration = data.get('duration')
+    distance = data.get('distance')
+    timestamp = datetime.now()
+    
+    record = {
         "username": usr,
-        "timestamp": time,
+        "timestamp": timestamp,
+        "duration": duration,
+        "distance": distance,
         "path": path
     }
     
-    paths.insert_one
+    paths.insert_one(record)
     return jsonify({"message": "POST request received"})
 
 
