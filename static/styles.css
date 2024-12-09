@@ -89,3 +89,20 @@ svg {
 .hidden {
     display: none;
 }
+
+#leaderboardModal {
+    height: 80%;
+    overflow: scroll;
+}
+
+#leaderDisplay {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px;
+}
+
+.leader {
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
