@@ -36,7 +36,7 @@ def debug():
 
 @app.route('sound/<name>')
 def fetch_sound(name):
-    return send_from_directory('./static/assets', name)
+    return send_from_directory('./assets', name)
 
 @app.route('/save_path_data', methods=['POST'])
 def save_path_data():
