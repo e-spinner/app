@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, json
+from flask import Flask, render_template, request, jsonify, json, send_from_directory
 import os
 import socket
 
@@ -24,7 +24,9 @@ def debug():
     print("POST Debug Data:", debug_data)
     return jsonify({"message": "POST request received"})
 
-
+@app.route('sound/<name>')
+def fetch_sound(name):
+    return send_from_directory('./static/assets', name)
 
 if __name__ == '__main__':
     app.run(debug=True, host=get_local_ip() )
