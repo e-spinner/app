@@ -6,7 +6,10 @@ let totalTimeLeft;
 let totalTime;
 let isPaused = false;
 
+
 document.addEventListener("DOMContentLoaded", () => {
+
+
 
     // ******** //
     // Timer UI //
@@ -102,6 +105,14 @@ document.addEventListener("DOMContentLoaded", () => {
             pauseButton.classList.remove('hidden');
             resumeButton.classList.add('hidden');
             stopButton.classList.add('hidden');
+
+            // Ashton - stuff I need to make work
+            // var runSound = new Audio('{{ url_for("static", filename="assets/Walking.mp3") }}');
+            //var runCompleted = new Audio('path_to_your_audio_file.mp3');
+            //var walkSound = new Audio('path_to_your_audio_file.mp3');
+            // const audio = new Audio('{{ url_for("static", filename="beep.mp3") }}');
+            // runSound.play();
+
             startInterval(); // Restart with remaining time
         }
     });
@@ -181,17 +192,25 @@ document.addEventListener("DOMContentLoaded", () => {
     // Helper //
     // ****** //
 
+    // load audio from servier
+    let runSound = new Audio('sound/Running.mp3')
+    let walkSound = new Audio('sound/Walking.mp3')
+    let finish = new Audio('sound/Run Completed.mp3')
 
     function startInterval() {
         const currentInterval = intervalSchedule[currentIntervalIndex];
 
         // Update SVG visibility
         if (currentInterval.action === "Run") {
+
             runIcon.classList.remove('hidden')
             walkIcon.classList.add('hidden')
+            runSound.play()
         } else {
+
             runIcon.classList.add('hidden')
             walkIcon.classList.remove('hidden')
+            walkSound.play()
         }
 
         timeLeft = currentInterval.duration;
@@ -200,10 +219,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (timeLeft <= 0) {
                 clearInterval(timer);
                 currentIntervalIndex++;
-                beep();
+                buzz();
                 if (currentIntervalIndex < intervalSchedule.length) {
                     startInterval();
                 } else {
+
+                    finish.play()
+
                     // alert("Session complete!");
                     openShareModal();
                     resetTimer();
@@ -216,7 +238,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 1000);
     }
 
-    function beep() {
+
+    function buzz() {
         // const audio = new Audio('{{ url_for("static", filename="beep.mp3") }}');
         // audio.play();
         try {
