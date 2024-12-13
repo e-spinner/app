@@ -9,13 +9,15 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZS2Wretv0mja0wkGSiPyCrx2-Q0rlKZU"></script>
     <script src="{{ url_for('static', filename='tracker.js') }}"></script>
-    <!-- <script src="{{ url_for('static', filename='map.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='share.js') }}"></script>
     <script src="{{ url_for('static', filename='timer.js') }}"></script>
 </head>
 
 <body>
     <h1>Run Timer App</h1>
     <div id="map"></div>
+
+    <button id="leaderBoardButton">Open Leaderboard</button>
 
     <!-- SVG Feedback Area -->
     <div id="display">
@@ -65,6 +67,46 @@
 
             <button id="startSession">Start Session</button>
             <button id="cancelSession">Cancel</button>
+        </div>
+    </div>
+
+
+    <!-- Modal for setting exercise times -->
+    <div id="shareModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Explore Your Run</h2>
+
+            <!-- Display map with the run path -->
+            <canvas id="shareMap"></canvas>
+
+            <!-- Display the total distance and duration -->
+            <p id="distance">Distance: 0 mi</p>
+            <p id="duration">Duration: 0 min</p>
+
+            <!-- Button to share the run -->
+            <button id="shareButton">Share Your Run</button>
+
+            <br>
+
+            <!-- Button to exit shareModal -->
+            <button id="endShareButton">exit</button>
+        </div>
+    </div>
+
+    <div id="nameRun" class="modal hidden">
+        <h2>Enter Your Name</h2>
+
+        <form id="nameForm">
+            <label for="nameInput">Name:</label>
+            <input type="text" id="nameInput" name="name" required>
+            <button type="submit">Share</button>
+        </form>
+    </div>
+
+    <div id="leaderboardModal" class="modal hidden">
+        <button id="closeLeaderboard">Close Leaderboard</button>
+        <div id="leaderDisplay">
+
         </div>
     </div>
 
