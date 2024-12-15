@@ -34,7 +34,7 @@ def debug():
     return jsonify({"message": "POST request received"})
 
 
-@app.route('sound/<name>')
+@app.route('/sound/<name>')
 def fetch_sound(name):
     return send_from_directory('./assets', name)
 
