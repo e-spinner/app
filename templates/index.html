@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
 
 <head>
     <meta charset="UTF-8">
@@ -14,10 +15,10 @@
 </head>
 
 <body>
-    <h1>Run Timer App</h1>
+    <h1>Regression Run</h1>
     <div id="map"></div>
 
-    <button id="leaderBoardButton">Open Leaderboard</button>
+    <button id="leaderBoardButton">Leaderboard</button>
 
     <!-- SVG Feedback Area -->
     <div id="display">
@@ -84,12 +85,12 @@
             <p id="duration">Duration: 0 min</p>
 
             <!-- Button to share the run -->
-            <button id="shareButton">Share Your Run</button>
+            <button id="shareButton">Share</button>
 
             <br>
 
             <!-- Button to exit shareModal -->
-            <button id="endShareButton">exit</button>
+            <button id="endShareButton">Close</button>
         </div>
     </div>
 
@@ -99,7 +100,7 @@
         <form id="nameForm">
             <label for="nameInput">Name:</label>
             <input type="text" id="nameInput" name="name" required>
-            <button type="submit">Share</button>
+            <button id="confirmNameButton" type="submit">Share</button>
         </form>
     </div>
 
