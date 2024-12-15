@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, json, send_from_directory
+import os
+
 import socket
 from pymongo import MongoClient
 from datetime import datetime
@@ -30,6 +32,11 @@ def debug():
     debug_data = request.get_json() if request.is_json else request.form
     print("POST Debug Data:", debug_data)
     return jsonify({"message": "POST request received"})
+
+
+@app.route('sound/<name>')
+def fetch_sound(name):
+    return send_from_directory('./assets', name)
 
 @app.route('/save_path_data', methods=['POST'])
 def save_path_data():
